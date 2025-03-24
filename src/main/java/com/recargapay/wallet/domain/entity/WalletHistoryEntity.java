@@ -1,15 +1,19 @@
 package com.recargapay.wallet.domain.entity;
 
 import com.recargapay.wallet.domain.enumeration.OperationType;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
-@Document("wallet")
-public class Wallet {
+@Document("walletHistory")
+public class WalletHistoryEntity {
 
-    private Long code;
+    @Id
+    private String id;
+    private String idWallet;
     private BigDecimal value;
-    private String document;
     private OperationType operationType;
+    private LocalDateTime dateTimeOperation;
 }

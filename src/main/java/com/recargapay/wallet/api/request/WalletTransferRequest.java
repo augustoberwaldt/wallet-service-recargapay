@@ -9,8 +9,9 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WalletRequest {
+public class WalletTransferRequest {
 
     private String idWallet;
+    private String idTransferWallet;
     private BigDecimal value;
 }

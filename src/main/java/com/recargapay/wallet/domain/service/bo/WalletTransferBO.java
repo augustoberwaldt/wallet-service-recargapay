@@ -5,15 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class WalletBO {
-
-    private String id;
+public class WalletTransferBO {
+    private String idWallet;
+    private String idTransferWallet;
     private BigDecimal value;
-    private LocalDateTime dateTimeOperation;
-    private String document;
     private OperationType operationType;
 }
