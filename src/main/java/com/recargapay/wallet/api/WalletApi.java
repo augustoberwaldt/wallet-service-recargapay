@@ -31,14 +31,14 @@ public class WalletApi {
                 .map(IWalletMapper.INSTANCE::toWalletResponse);
     }
 
-    @PostMapping("balance/{idWallet}")
+    @GetMapping("balance/{idWallet}")
     public Mono<WalletResponse> balance(@PathVariable String idWallet) {
 
         return service.getBalanceByWallet(idWallet)
                 .map(IWalletMapper.INSTANCE::toWalletResponse);
     }
 
-    @PostMapping("balance-by-history")
+    @GetMapping("balance-by-history")
     public Mono<WalletResponse> balanceHistory(@Parameter WalletHistoryFilterRequest request) {
 
         return service.getBalanceByWalletHistory(request)
