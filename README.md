@@ -20,8 +20,14 @@ cd wallet-service-recargapay
 
 Ensure that MongoDB is running and configured as per the `application.properties`:
 
+Run local mongodb  docker-composer.yml
+
+```sh 
+docker-compose -f docker-compose.yml up -d
+```
+
 ```ini
-spring.data.mongodb.uri=mongodb+srv://mongodb-dev:BbNnt5Arxz8QslxJ@sandbox.h7rbn.mongodb.net/recargapay?retryWrites=true&w=majority&appName=sandbox
+spring.data.mongodb.uri=mongodb://root:MongoDB2025!@localhost:27017/recargapay
 ```
 
 ### 3. Build the project

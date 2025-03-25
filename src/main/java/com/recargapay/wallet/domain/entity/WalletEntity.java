@@ -15,7 +15,7 @@ public class WalletEntity {
     @Id
     private String id;
     private BigDecimal value;
-    private LocalDateTime dateTimeOperation;
     private String document;
+    private LocalDateTime dateTimeOperation;
     private OperationType operationType;
 }

@@ -10,7 +10,6 @@ import com.recargapay.wallet.domain.mapper.IWalletMapper;
 import com.recargapay.wallet.domain.service.WalletService;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -56,7 +55,6 @@ public class WalletApi {
                 .map(IWalletMapper.INSTANCE::toWalletResponse);
     }
 
-
     @PostMapping("withdraw")
     public Mono<WalletResponse> withdraw(@RequestBody WalletRequest request) {
 
@@ -72,7 +70,7 @@ public class WalletApi {
         return Mono.just(request)
                 .map(IWalletMapper.INSTANCE::toWalletTransferBO)
                 .flatMap(service::transfer)
-                .map(IWalletMapper.INSTANCE::toWalletResponse);
+                .map(IWalletMapper.INSTANCE::toWalletTransferResponse);
     }
 
 }

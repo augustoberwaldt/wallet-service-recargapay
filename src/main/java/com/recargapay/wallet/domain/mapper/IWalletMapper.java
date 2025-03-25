@@ -10,10 +10,12 @@ import com.recargapay.wallet.domain.service.bo.WalletBO;
 import com.recargapay.wallet.domain.service.bo.WalletTransferBO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
 import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface IWalletMapper {
+
     IWalletMapper INSTANCE = Mappers.getMapper(IWalletMapper.class);
 
     WalletBO toWalletBO(WalletCreateRequest walletRequest);
@@ -22,8 +24,16 @@ public interface IWalletMapper {
 
     WalletBO toWalletBO(WalletEntity walletEntity);
 
-    @Mapping(target = "id", source = "idWallet")
-    WalletBO toWalletBO(WalletHistoryEntity walletHistoryEntity);
+
+    default WalletBO toWalletBO(WalletHistoryEntity walletHistoryEntity) {
+
+        return WalletBO.builder()
+                .operationType(walletHistoryEntity.getOperationType())
+                .id(walletHistoryEntity.getIdWallet())
+                .value(walletHistoryEntity.getValue())
+                .document(walletHistoryEntity.getDocument())
+                .build();
+    }
 
     WalletResponse toWalletResponse(WalletBO walletBO);
 
@@ -33,4 +43,6 @@ public interface IWalletMapper {
 
 
     WalletHistoryEntity toWalletHistory(WalletEntity walletEntity);
+
+    WalletResponse toWalletTransferResponse(WalletTransferBO walletTransferBO);
 }

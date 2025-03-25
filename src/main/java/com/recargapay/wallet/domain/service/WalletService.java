@@ -138,15 +138,45 @@ public class WalletService {
                 .switchIfEmpty(Mono.error(new RuntimeException("Carteira nao encontrada para deposito.")));
     }
 
+    /**
+     *
+     * @param walletTransferBO
+     * @return
+     */
+
     public Mono<WalletTransferBO> transfer(WalletTransferBO walletTransferBO) {
 
         return getWalletEntity(walletTransferBO.getIdWallet())
-                .flatMap(self -> getWalletTransferBOMono(walletTransferBO, self));
+                .flatMap(self -> processTransfer(walletTransferBO, self));
     }
 
-    private Mono<WalletTransferBO> getWalletTransferBOMono(WalletTransferBO walletTransferBO, WalletEntity wallet) {
+    private Mono<WalletTransferBO> processTransfer(WalletTransferBO walletTransferBO, WalletEntity wallet) {
         return repository.findById(walletTransferBO.getIdTransferWallet())
-                .switchIfEmpty(Mono.error(new RuntimeException("Carteira ha ser enviada nao encontrata.")))
-                .flatMap();
+                .switchIfEmpty(Mono.error(new RuntimeException("Carteira destino nao encontrada.")))
+                .flatMap(transferWallet ->
+                        historyRepository.save(IWalletMapper.INSTANCE.toWalletHistory(wallet))
+                                .flatMap(walletHistoryEntity -> {
+                                    wallet.setValue(wallet.getValue().subtract(walletTransferBO.getValue()));
+                                    return repository.save(wallet);
+                                })
+                                .flatMap(savedWallet -> processTransferTargetWallet(walletTransferBO, transferWallet))
+                );
+    }
+
+
+    /**
+     *  Method processTransferTargetWallet
+     *
+     * @param walletTransferBO
+     * @param transferWallet
+     * @return Mono<WalletTransferBO>
+     */
+    private Mono<WalletTransferBO> processTransferTargetWallet(WalletTransferBO walletTransferBO, WalletEntity transferWallet) {
+        return historyRepository.save(IWalletMapper.INSTANCE.toWalletHistory(transferWallet))
+                .flatMap(walletHistoryEntity -> {
+                    transferWallet.setValue(transferWallet.getValue().add(walletTransferBO.getValue()));
+                    return repository.save(transferWallet);
+                })
+                .then(Mono.just(walletTransferBO));
     }
 }
